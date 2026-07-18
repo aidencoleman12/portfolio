@@ -2,12 +2,10 @@
   "redirects": [
     { "source": "/", "destination": "/youshallnotpass" }
   ]
+
   ,
   "rewrites": [
-    { "source": "/youshallnotpass", "destination": "/inprogress/index.html" }
-  ]
-  ,
-  "rewrites": [
+    { "source": "/youshallnotpass", "destination": "/inprogress/index.html" },
     { "source": "/home", "destination": "/index.html" }
   ]
 
