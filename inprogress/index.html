@@ -286,7 +286,7 @@
     gate.addEventListener("submit", function (e) {
       e.preventDefault();
       if (pw.value.trim().toLowerCase() === "surf") {
-        window.location.href = "/index.html";   // unlock the full portfolio
+        window.location.href = "/home";   // unlock the full portfolio
       } else {
         msg.textContent = "Not quite — try again.";
         gate.classList.remove("gate--error");
