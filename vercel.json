@@ -2,4 +2,7 @@
   "redirects": [
     { "source": "/", "destination": "/inprogress/index.html" }
   ]
+  ,"rewrites": [
+    { "source": "/index.html", "destination": "home", "permanent": true }
+  ]
 }
