@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aiden Coleman — Coming soon</title>
+  <meta name="description" content="This portfolio is being built. Come back in a bit.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+    --bg:       #fafafa;
+    --ink:      #0b0b0b;
+    --gray:     #5e5e5e;
+    --muted:    #858585;
+    --nav:      #484848;
+    --accent:   #0055b0;
+    --faint:    rgba(0, 0, 0, 0.15);
+    --hairline: rgba(0, 0, 0, 0.08);
+    --display: "Plus Jakarta Sans", system-ui, sans-serif;
+    --mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+    --pad:     clamp(1.25rem, 5vw, 4rem);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+
+  .wrap {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--pad);
+  }
+
+  /* ---- Header ---- */
+  
+  .brand { display: flex; align-items: baseline; gap: 0.5rem; text-decoration: none; }
+  .brand__name {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .brand__ver {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: var(--accent);
+  }
+  .nav { display: flex; align-items: center; gap: clamp(1.25rem, 4vw, 3rem); }
+  .nav a {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    color: var(--nav);
+    text-decoration: none;
+    position: relative;
+    padding-block: 0.25rem;
+    transition: color 0.25s ease;
+  }
+  .nav a::after {
+    content: "";
+    position: absolute; left: 0; bottom: -2px;
+    width: 100%; height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav a:hover::after { transform: scaleX(1); }
+
+  /* ---- Main ---- */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(2rem, 8vh, 6rem);
+  }
+  .hero { display: grid; gap: clamp(1.5rem, 4vh, 2.5rem); }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .status .dot {
+    width: 0.55rem; height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%  { box-shadow: 0 0 0 0.7rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  /* Big "/|" motif — the site typing itself into existence */
+  .motif {
+    display: flex;
+    align-items: flex-end;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: clamp(4.5rem, 13vw, 11rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--faint);
+    user-select: none;
+  }
+  .motif .caret {
+    color: var(--gray);
+    animation: blink 1.05s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .headline {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2rem, 5.2vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--gray);
+    max-width: 18ch;
+    margin: 0;
+  }
+  .headline strong { font-weight: 800; color: #4a4a4a; }
+
+  .lede {
+    font-family: var(--mono);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--ink);
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; margin-top: 0.25rem; }
+  .btn {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn--primary {
+    color: var(--accent);
+    padding: 0.7rem 1.15rem;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 0px;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+  .btn--primary:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  
+
+  /* ---- Footer ---- */
+  
+
+  @media (prefers-reduced-motion: reduce) {
+    .status .dot, .motif .caret { animation: none; }
+  }
+  </style>
+</head>
+
+<body>
+  
+
+  <main>
+    <div class="wrap hero">
+      <span class="status"></span>aidens.space</span>
+
+      <div class="motif" aria-hidden="true">/<span class="caret">|</span></div>
+
+      <h1 class="headline">This portfolio is being </strong>built</strong> 🛠️</h1>
+
+      <p class="lede">Come back later to see the full site :)</p>
+
+      <div class="cta">
+        <a class="btn btn--primary" href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        
+    </div>
+  </main>
+
+  
+</body>
+</html>
