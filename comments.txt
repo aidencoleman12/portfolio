@@ -1,0 +1,1 @@
+- make the page margins smaller. this will move the header elements closer to the side. Then, make the image of the project cards bigger so it still fills the page

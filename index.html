@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aiden's Portfolio</title>
+  <meta name="description" content="Learn about my experience and reach out">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Aiden's Portfolio">
+  <meta property="og:description" content="Learn about my experience and reach out">
+  <meta property="og:url" content="https://aidencoleman.framer.website/home3.1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Aiden's Portfolio">
+  <meta name="twitter:description" content="Learn about my experience and reach out">
+  <link rel="canonical" href="https://aidencoleman.framer.website/home3.1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+  /* ============================================================
+     Design tokens — extracted from the original Framer design
+     ============================================================ */
+  :root {
+    --bg:        #fafafa;
+    --ink:       #0b0b0b;   /* near-black text            */
+    --gray:      #5e5e5e;   /* display headings           */
+    --muted:     #858585;   /* secondary / card copy      */
+    --nav:       #484848;   /* nav links                  */
+    --accent:    #0055b0;   /* version badge / links      */
+    --faint:     rgba(0, 0, 0, 0.15); /* "/|" watermark   */
+    --hairline:  rgba(0, 0, 0, 0.08);
+
+    --display: "Plus Jakarta Sans", system-ui, sans-serif;
+    --mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+    --content:  1088px;   /* inner column width          */
+    --wide:     1280px;
+    --pad:      clamp(1.25rem, 5vw, 4rem);
+    --header-h: 88px;
+    --nav-gutter: 10rem;  /* right-side room the scroll nav needs to stay clear of content */
+  }
+
+  /* ============================================================
+     Reset
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;              /* Chrome, Safari, Edge */
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, p, figure { margin: 0; }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--wide);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+  }
+
+  /* ============================================================
+     Header (sticky)
+     ============================================================ */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .site-header .wrap {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .brand__name {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .brand__ver {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.625rem;
+    color: var(--accent);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 3rem);
+  }
+  .nav a {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    color: var(--nav);
+    text-decoration: none;
+    position: relative;
+    padding-block: 0.25rem;
+    transition: color 0.25s ease;
+  }
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav a:hover::after { transform: scaleX(1); }
+
+  /* ============================================================
+     Section scaffolding
+     ============================================================ */
+  section { position: relative; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Watermark  "/|"  motif */
+  .motif {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: clamp(5rem, 13vw, 12rem);
+    line-height: 0.8;
+    color: var(--faint);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* ============================================================
+     Hero
+     ============================================================ */
+  /* Fill most of the first screen; center the text but leave the next
+     section peeking at the bottom. */
+  .hero {
+    min-height: calc(87svh - var(--header-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(3rem, 9vh, 6rem) clamp(1.5rem, 4vh, 3rem);
+  }
+  .hero__title {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2rem, 5.2vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--gray);
+    max-width: 20ch;
+  }
+  .hero__title strong { font-weight: 800; color: #4a4a4a; }
+  .hero__foot { margin-top: clamp(2rem, 6vh, 4rem); }
+
+  /* ============================================================
+     About
+     ============================================================ */
+  .about { padding-block: clamp(3rem, 8vh, 6rem); }
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .about__grid > * { min-width: 0; }
+  .about__photo {
+    width: 100%;
+    height: auto;              /* override the width/height attrs; let aspect-ratio crop */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  .about__heading {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .about__body p {
+    font-family: var(--mono);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.35vw, 1.125rem);
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .about__body p + p { margin-top: 1.25rem; }
+
+  /* ============================================================
+     Marquees (rebuilt with pure CSS — no JS engine)
+     ============================================================ */
+  .marquee {
+    --gap: clamp(2rem, 5vw, 4rem);
+    --speed: 32s;
+    overflow: hidden;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    width: max-content;
+    animation: marquee var(--speed) linear infinite;
+  }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  @keyframes marquee {
+    to { transform: translateX(calc(-50% - (var(--gap) / 2))); }
+  }
+
+  /* words marquee */
+  .marquee--words { padding-block: clamp(2rem, 6vh, 4rem); }
+  .marquee--words .word {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.6vw, 3rem);
+    letter-spacing: -0.01em;
+    color: var(--gray);
+    white-space: nowrap;
+  }
+  .marquee--words .dot {
+    width: 0.55em; height: 0.55em;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+    opacity: 0.7;
+  }
+
+  /* logo marquee */
+  .marquee--logos { padding-block: clamp(1.5rem, 4vh, 2.5rem); }
+  .marquee--logos .marquee__track { --gap: clamp(5rem, 6vw, 10rem); --speed: 40s; }
+  .marquee--logos img {
+    height: clamp(64px, 6vw, 96px);
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+  .marquee--logos img:hover { filter: grayscale(0); opacity: 1; }
+
+  /* ============================================================
+     Work / projects
+     ============================================================ */
+  .work { padding-block: clamp(3rem, 8vh, 6rem); }
+  /* Animated section title: continues the hero "/|" motif, typing "/" → "/WORD".
+     Same mono face + size as .motif. Reusable — set --type-chars to the number
+     of letters after the slash (WORK = 4, ABOUT = 5). */
+  .type-head {
+    display: flex;
+    align-items: flex-end;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: clamp(5rem, 13vw, 12rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--faint);
+    margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+    user-select: none;
+  }
+  .type-head__word {
+    overflow: hidden;
+    white-space: nowrap;
+    flex: none;
+  }
+  /* "armed" (set by JS): hide the word so it can be typed in on scroll.
+     Without JS the full word simply shows. */
+  .type-head.armed .type-head__word { width: 0; }
+  .type-head.armed.is-typing .type-head__word {
+    animation: type-in 0.6s steps(var(--type-chars, 4)) 0.15s forwards;
+  }
+  @keyframes type-in { to { width: calc(var(--type-chars, 4) * 1ch); } }
+  .type-head__caret {
+    flex: none;
+    animation: caret-blink 1.05s step-end infinite;
+  }
+  @keyframes caret-blink { 50% { opacity: 0; } }
+
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    padding-block: clamp(2.5rem, 6vh, 4.5rem);
+    border-top: 1px solid var(--hairline);
+  }
+  .project > * { min-width: 0; }
+  .project:nth-child(even) .project__media { order: 2; }
+
+  .project__media {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f0f0f0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease;
+  }
+  .project__media video,
+  .project__media img { width: 100%; height: auto; }
+  .project:hover .project__media {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -24px rgba(0,0,0,0.28);
+  }
+
+  .project__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .project__meta span { position: relative; }
+  .project__meta span + span::before {
+    content: "•";
+    position: absolute;
+    left: -0.65rem;
+    color: var(--hairline);
+  }
+  .project__brand { height: 34px; width: auto; margin-bottom: 1.25rem; opacity: 0.85; }
+  .project__name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 1rem;
+  }
+  .project__desc {
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+    max-width: 46ch;
+  }
+  .project__links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; }
+  .btn {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn--primary {
+    color: var(--accent);
+    padding: 0.7rem 1.15rem;
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 0px;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+  .btn--primary:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .btn--ghost { color: var(--nav); }
+  .btn--ghost .arrow { transition: transform 0.25s ease; }
+  .btn--ghost:hover .arrow { transform: translateX(4px); }
+
+  .project--soon { opacity: 0.85; }
+  .project--soon .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px dashed var(--hairline);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+  }
+
+  /* ============================================================
+     Footer
+     ============================================================ */
+  .site-footer {
+    border-top: 1px solid var(--hairline);
+    padding-block: clamp(2.5rem, 6vh, 4rem);
+    margin-top: clamp(2rem, 6vh, 4rem);
+  }
+  .site-footer .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .site-footer .brand__name { font-size: 1.25rem; }
+  .site-footer .nav a { font-size: 0.8rem; }
+
+  /* ============================================================
+     Scroll navigator (right-side notched ruler with a gliding dot)
+     ============================================================ */
+  /* Sections clear the sticky header when jumped to via anchor */
+  #hello, #aboutme, #work, #contact { scroll-margin-top: calc(var(--header-h) + 12px); }
+
+  .scroll-nav {
+    --sn-row:        20px;   /* height of every notch / label row       */
+    --sn-notch:      12px;   /* length of a short (outer) notch line     */
+    --sn-notch-long: 16px;   /* length of the longer middle notch line   */
+    --sn-dot:        8px;    /* diameter of the gliding dot              */
+    position: fixed;
+    right: clamp(1rem, 2.5vw, 2.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 60;
+    padding-right: calc(var(--sn-dot) + 12px);  /* lane for the dot, right of the notches */
+  }
+  .scroll-nav__scale {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;   /* right-align notches + labels to a shared edge */
+  }
+  .sn-notch,
+  .sn-stop {
+    height: var(--sn-row);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .sn-notch::after {
+    content: "";
+    width: var(--sn-notch);
+    height: 2px;
+    border-radius: 1px;
+    background: #d4d4d4;
+  }
+  .sn-notch--long::after { width: var(--sn-notch-long); }
+  .sn-stop {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #cbcbcb;                 /* inactive label */
+    transition: color 0.3s ease;
+  }
+  .sn-stop:hover { color: var(--gray); }
+  .sn-stop.is-active { color: var(--ink); font-weight: 600; }  /* current section */
+
+  /* The dot: absolutely positioned, JS sets --sn-y; it glides as you scroll */
+  .scroll-nav__dot {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--sn-dot);
+    height: var(--sn-dot);
+    border-radius: 50%;
+    background: var(--ink);
+    transform: translate(0, calc(var(--sn-y, 0px) - 50%));
+    will-change: transform;
+  }
+  /* Smooth the snap when the active section changes on click-to-scroll */
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-nav__dot { transition: transform 0.12s linear; }
+  }
+
+  /* ============================================================
+     Scroll-reveal (IntersectionObserver toggles .is-visible)
+     ============================================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+                transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* ============================================================
+     Keep content clear of the fixed scroll nav (no overlap)
+     ============================================================ */
+  /* Marquees are full-bleed, so they always reserve the nav's right column. */
+  @media (min-width: 901px) {
+    .marquee { width: calc(100% - var(--nav-gutter)); }
+  }
+  /* Bounded content only needs the reserve until the viewport is wide enough
+     that its centered right margin already clears the nav on its own. */
+  @media (min-width: 901px) and (max-width: 1600px) {
+    main .wrap,
+    .site-footer .wrap { padding-right: var(--nav-gutter); }
+  }
+
+  /* ============================================================
+     Responsive breakpoints
+     ============================================================ */
+  @media (max-width: 900px) {
+    .scroll-nav { display: none; }   /* dock would overlap content on small screens */
+    .about__grid { grid-template-columns: 1fr; }
+    .about__photo { max-width: 380px; }
+    .project { grid-template-columns: 1fr; }
+    .project:nth-child(even) .project__media { order: 0; }
+    .project__media { order: -1; }   /* media first on narrow screens */
+  }
+  @media (max-width: 560px) {
+    :root { --header-h: 72px; }
+    .hero__foot { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .nav { gap: 1.25rem; }
+  }
+
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .marquee__track { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .type-head.armed .type-head__word { width: calc(var(--type-chars, 4) * 1ch); }  /* show word, skip the type-in */
+    .type-head__caret { animation: none; }
+    * { animation-duration: 0.001ms !important; }
+  }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== Scroll navigator (right-side ruler) ==================== -->
+  <nav class="scroll-nav" aria-label="Section navigation">
+    <div class="scroll-nav__scale">
+      <span class="sn-notch"></span>
+      <span class="sn-notch sn-notch--long"></span>
+      <span class="sn-notch"></span>
+      <a class="sn-stop" href="#hello"   data-section="hello">Hello</a>
+      <span class="sn-notch"></span>
+      <span class="sn-notch sn-notch--long"></span>
+      <span class="sn-notch"></span>
+      <a class="sn-stop" href="#work"    data-section="work">Work</a>
+      <span class="sn-notch"></span>
+      <span class="sn-notch sn-notch--long"></span>
+      <span class="sn-notch"></span>
+      <a class="sn-stop" href="#aboutme" data-section="aboutme">About Me</a>
+      <span class="sn-notch"></span>
+      <span class="sn-notch sn-notch--long"></span>
+      <span class="sn-notch"></span>
+      <a class="sn-stop" href="#contact" data-section="contact">Contact</a>
+      <span class="sn-notch"></span>
+      <span class="sn-notch sn-notch--long"></span>
+      <span class="sn-notch"></span>
+    </div>
+    <span class="scroll-nav__dot" aria-hidden="true"></span>
+  </nav>
+
+  <!-- ============================ Header ============================ -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <span class="brand__name">Aiden Coleman</span>
+        <span class="brand__ver">3.1</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============================ Hero ============================ -->
+    <section class="hero" id="hello">
+      <div class="wrap">
+        <h1 class="hero__title reveal">
+          Crafting <strong>digital experiences</strong> and
+          <strong>enabling design</strong> where people need it
+        </h1>
+        <div class="hero__foot">
+          
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ============================ Work ============================ -->
+    <section class="work" id="work">
+      <div class="wrap">
+        <h2 class="type-head" data-type aria-label="/WORK"><span aria-hidden="true">/</span><span class="type-head__word" aria-hidden="true">WORK</span><span class="type-head__caret" aria-hidden="true">|</span></h2>
+
+        <!-- Project 1 — Horizon -->
+        <article class="project reveal">
+          <div class="project__media">
+            <video src="https://framerusercontent.com/assets/u8UAWa7l9VwhcZdXJTXCFar9ARo.mp4"
+                   autoplay muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="project__info">
+            <div class="project__meta"><span>Internship</span><span>Design Systems</span><span>2025</span></div>
+            <img class="project__brand"
+                 src="https://framerusercontent.com/images/D4cFSaT00mrDTRBcwaQNyaEQSXM.png?width=1518&height=247"
+                 alt="Horizon Design System" loading="lazy">
+            <h3 class="project__name">Horizon Design System from the Design Enablement Team</h3>
+            <p class="project__desc">Designed the landing page for the new Horizon Blog, enhanced
+               Figma component configurations, and educated user research through our UX
+               certification course.</p>
+            <div class="project__links">
+              <a class="btn btn--primary" href="https://horizon.servicenow.com/blog/design-enablement-playbook"
+                 target="_blank" rel="noopener">What&rsquo;s Design Enablement?</a>
+              <a class="btn btn--ghost" href="https://horizon.servicenow.com/blog/design-enablement-playbook"
+                 target="_blank" rel="noopener">Read <span class="arrow">&rarr;</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 — THON -->
+        <article class="project reveal">
+          <div class="project__media">
+            <video src="https://framerusercontent.com/assets/NIR9kO5aatSmQ75FyHMxXF0Bw.mp4"
+                   autoplay muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="project__info">
+            <div class="project__meta"><span>Volunteer</span><span>Philanthropy</span><span>2026</span></div>
+            <img class="project__brand"
+                 src="https://framerusercontent.com/images/O6iY2MhNyX4XfAZjQdCcYxujag.png?width=1058&height=278"
+                 alt="THON" loading="lazy">
+            <h3 class="project__name">Design for the largest student-run philanthropy in the world</h3>
+            <p class="project__desc">Led UX initiatives for all digital platforms of THON&trade;.
+               Designed for our mission of enhancing the lives of children and families impacted by
+               childhood cancer.</p>
+            <div class="project__links">
+              <a class="btn btn--primary" href="https://thon.org/" target="_blank" rel="noopener">What&rsquo;s THON?</a>
+              <a class="btn btn--ghost" href="https://thon.org/" target="_blank" rel="noopener">Read <span class="arrow">&rarr;</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 — upcoming -->
+        <article class="project project--soon reveal">
+          <div class="project__media" style="aspect-ratio:16/10; display:grid; place-items:center;">
+            <span class="badge">Coming soon</span>
+          </div>
+          <div class="project__info">
+            <div class="project__meta"><span>Volunteer</span><span>2026</span></div>
+            <h3 class="project__name">template :0</h3>
+            <p class="project__desc">A new volunteer initiative in the works &mdash; check back soon
+               for the full story.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================ About ============================ -->
+    <section class="about" id="aboutme">
+      <div class="wrap">
+        <h2 class="type-head" data-type aria-label="/ABOUT"><span aria-hidden="true">/</span><span class="type-head__word" aria-hidden="true">ABOUT_ME</span><span class="type-head__caret" aria-hidden="true">|</span></h2>
+      </div>
+      <div class="wrap about__grid">
+        <img class="about__photo reveal"
+             src="https://framerusercontent.com/images/UHm9a50AVagGF3ltS4vlDffQm0Q.jpeg?width=1000&height=1000"
+             alt="Aiden Coleman" width="1000" height="1000" loading="lazy">
+        <div class="about__body reveal" style="--reveal-delay:120ms">
+          <h2 class="about__heading">Hi, I&rsquo;m Aiden.</h2>
+          <p>I am Product Designer at ServiceNow. I work laterally across
+             design and engineering teams to deliver scalable design tools that push what is
+             considered &ldquo;standard&rdquo;.</p>
+          <p>I love working with people who have yet to learn more about design. Seeing the
+             &ldquo;aha!&rdquo; on peoples&rsquo; faces when good design just <em>clicks</em> is always
+             worth the time and effort it takes to get there.</p>
+          <p>Aside from work, you can catch me playing guitar/piano/drums/bass, shooting hoops,
+             or climbing rocks. I am also the #1 fan of the Washington Capitals, and you might
+             catch me wearing #8 on a good day.</p>
+        </div>
+      </div>
+      <!-- =================== Process-words marquee =================== -->
+    <div class="marquee marquee--words reveal" aria-hidden="true">
+      <div class="marquee__track">
+        <!-- set A -->
+        <span class="word">Discover the domain</span><span class="dot"></span>
+        <span class="word">Ask better questions</span><span class="dot"></span>
+        <span class="word">Design thoughtfully</span><span class="dot"></span>
+        <span class="word">Test with real users</span><span class="dot"></span>
+        <span class="word">Learn and iterate</span><span class="dot"></span>
+        <!-- set B (duplicate for seamless loop) -->
+        <span class="word">Discover the domain</span><span class="dot"></span>
+        <span class="word">Ask better questions</span><span class="dot"></span>
+        <span class="word">Design thoughtfully</span><span class="dot"></span>
+        <span class="word">Test with real users</span><span class="dot"></span>
+        <span class="word">Learn and iterate</span><span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- ======================= Logo marquee ======================= -->
+    <div class="marquee marquee--logos reveal" aria-label="Tools and brands">
+      <div class="marquee__track">
+        <!-- set A + duplicate set B are generated by script below -->
+      </div>
+    </div>
+    </section>
+  </main>
+
+  <!-- ============================ Footer / Contact ============================ -->
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <a class="brand" href="#top">
+        <span class="brand__name">Aiden Coleman</span>
+        <span class="brand__ver">3.1</span>
+      </a>
+      <nav class="nav" aria-label="Footer">
+        <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">Resume</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* -------- Logo marquee: build one set, then clone for a seamless loop -------- */
+    var LOGO_BASE = "images/";
+    var LOGOS = [
+      "figma.svg", "notion.png", "github.svg", "vscode.png", "claudecode.png",
+      "intellij.png", "framer.png", "premiere.png", "logic.png"
+    ];
+    var track = document.querySelector(".marquee--logos .marquee__track");
+    if (track) {
+      var makeSet = function () {
+        var frag = document.createDocumentFragment();
+        LOGOS.forEach(function (file) {
+          var img = new Image();
+          img.src = LOGO_BASE + file;
+          img.alt = "";
+          img.loading = "lazy";
+          img.setAttribute("aria-hidden", "true");
+          frag.appendChild(img);
+        });
+        return frag;
+      };
+      track.appendChild(makeSet()); // set A
+      track.appendChild(makeSet()); // set B (duplicate → loop has no seam)
+    }
+
+    /* -------- Scroll navigator: glide the dot to the section in view -------- */
+    (function () {
+      var nav = document.querySelector(".scroll-nav");
+      if (!nav) return;
+      var dot = nav.querySelector(".scroll-nav__dot");
+      var stops = [].slice.call(nav.querySelectorAll(".sn-stop[data-section]"));
+      if (!dot || !stops.length) return;
+
+      // Pair each label stop with its section (page order = top → bottom).
+      var items = stops
+        .map(function (stop) {
+          return { stop: stop, section: document.getElementById(stop.getAttribute("data-section")) };
+        })
+        .filter(function (it) { return it.section; });
+      if (!items.length) return;
+
+      var stopY = function (stop) { return stop.offsetTop + stop.offsetHeight / 2; };
+      var lerp  = function (a, b, t) { return a + (b - a) * t; };
+      var clamp = function (v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); };
+
+      var setActive = function (idx) {
+        items.forEach(function (it, i) { it.stop.classList.toggle("is-active", i === idx); });
+      };
+      var moveDot = function (idx, y) {
+        dot.style.setProperty("--sn-y", y + "px");
+        setActive(idx);
+      };
+
+      // The anchor jump aligns a section's top this far below the viewport top
+      // (matches the sections' CSS scroll-margin-top). Using the same value as
+      // the reference line makes the dot rest exactly on a section's label when
+      // you scroll or click to it — not slightly past it.
+      var headerOffset = function () {
+        var h = document.querySelector(".site-header");
+        return (h ? h.offsetHeight : 88) + 12;
+      };
+
+      // While a nav label is clicked, hold the dot on it until the smooth
+      // scroll finishes, so it snaps cleanly instead of gliding from afar.
+      var pinned = null;
+      var pinTimer;
+      var unpin = function () {
+        if (pinned === null) return;
+        pinned = null;
+        update();
+      };
+
+      var update = function () {
+        if (pinned !== null) { moveDot(pinned, stopY(items[pinned].stop)); return; }
+
+        var n = items.length;
+        var H = window.innerHeight;
+        var scrollY = window.scrollY || window.pageYOffset || 0;
+        var docEnd = document.documentElement.scrollHeight;
+        var maxScroll = Math.max(0, docEnd - H);
+        var tops = items.map(function (it) {
+          return it.section.getBoundingClientRect().top + scrollY;
+        });
+        var y, active;
+
+        if (scrollY <= 2) {
+          // Pinned at the very top → sit on the first section.
+          y = stopY(items[0].stop); active = 0;
+        } else if (scrollY >= maxScroll - 2) {
+          // Hit the bottom → sit on the last section (footer is short).
+          y = stopY(items[n - 1].stop); active = n - 1;
+        } else {
+          // Reference line = where an anchored section's top lands, so the dot
+          // rests on the label of whichever section you've scrolled to.
+          var ref = scrollY + headerOffset();
+          if (ref <= tops[0]) {
+            y = stopY(items[0].stop); active = 0;
+          } else if (ref >= tops[n - 1]) {
+            y = stopY(items[n - 1].stop); active = n - 1;
+          } else {
+            var i = 0;
+            while (i < n - 1 && ref >= tops[i + 1]) i++;
+            var t = clamp((ref - tops[i]) / ((tops[i + 1] - tops[i]) || 1), 0, 1);
+            y = lerp(stopY(items[i].stop), stopY(items[i + 1].stop), t);
+            active = i;   // the section the user is currently in
+          }
+        }
+        moveDot(active, y);
+      };
+
+      // Click a label → snap the dot to it now, hold through the smooth scroll.
+      items.forEach(function (it, i) {
+        it.stop.addEventListener("click", function () {
+          pinned = i;
+          moveDot(i, stopY(it.stop));
+          if ("onscrollend" in window) {
+            window.addEventListener("scrollend", unpin, { once: true });
+          }
+          clearTimeout(pinTimer);
+          pinTimer = setTimeout(unpin, 1200);   // fallback if scrollend never fires
+        });
+      });
+
+      var ticking = false;
+      var onScroll = function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { update(); ticking = false; });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", update);
+      window.addEventListener("load", update);
+      update();
+    })();
+
+    /* -------- Section titles: type "/" → "/WORD" when scrolled into view -------- */
+    (function () {
+      var titles = [].slice.call(document.querySelectorAll(".type-head[data-type]"));
+      titles.forEach(function (title) {
+        var word = title.querySelector(".type-head__word");
+        if (word) title.style.setProperty("--type-chars", word.textContent.trim().length);
+        title.classList.add("armed");   // hide the word so JS can type it in
+        var run = function () { title.classList.add("is-typing"); };
+        if (!("IntersectionObserver" in window)) { run(); return; }
+        var io = new IntersectionObserver(function (entries, obs) {
+          if (entries[0].isIntersecting) { run(); obs.disconnect(); }
+        }, { threshold: 0.6 });
+        io.observe(title);
+      });
+    })();
+
+    /* -------- Scroll reveal via IntersectionObserver -------- */
+    var reveals = document.querySelectorAll(".reveal");
+    var reveal = function (el) { el.classList.add("is-visible"); };
+    var revealAll = function () { reveals.forEach(reveal); };
+
+    if (!("IntersectionObserver" in window) || reveals.length === 0) {
+      revealAll();
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          reveal(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+    reveals.forEach(function (el) { io.observe(el); });
+
+    /* Failsafe: never leave content stuck invisible if the observer
+       doesn't fire (0-size viewport, background tab, prerender, etc.). */
+    window.addEventListener("load", function () {
+      setTimeout(revealAll, 1500);
+    });
+  })();
+  </script>
+</body>
+</html>
