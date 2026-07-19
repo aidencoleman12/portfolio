@@ -65,6 +65,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 0.5s ease;   /* big-four album hover tints the whole page */
   }
   h1, h2, h3, p, figure { margin: 0; }
   img, video { display: block; max-width: 100%; }
@@ -286,7 +287,7 @@
     height: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 0px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
   /* The big four — adjacent 2x2 tiles; a hover-state video crossfades in */
@@ -833,19 +834,19 @@
           <span class="marquee-label">My album wall</span>
           <div class="album-wall">
             <!-- The big four — adjacent 2x2 cluster -->
-            <figure class="album album--fav fav--tl">
+            <figure class="album album--fav fav--tl" data-bg="#8b9565">
               <img src="albums/bigfour/zeppelin4.png" alt="Led Zeppelin IV — Led Zeppelin">
               <video src="albums/bigfourhoverstates/zeppelinIV.mp4" poster="albums/bigfour/zeppelin4.png" muted loop playsinline preload="none"></video>
             </figure>
-            <figure class="album album--fav fav--tr">
+            <figure class="album album--fav fav--tr" data-bg="#bd0000">
               <img src="albums/bigfour/darkside.png" alt="The Dark Side of the Moon — Pink Floyd">
               <video src="albums/bigfourhoverstates/darkside.mp4" poster="albums/bigfour/darkside.png" muted loop playsinline preload="none"></video>
             </figure>
-            <figure class="album album--fav fav--bl">
+            <figure class="album album--fav fav--bl" data-bg="#E69123">
               <img src="albums/bigfour/inrainbows.png" alt="In Rainbows — Radiohead">
               <video src="albums/bigfourhoverstates/inrainbows.mp4" poster="albums/bigfour/inrainbows.png" muted loop playsinline preload="none"></video>
             </figure>
-            <figure class="album album--fav fav--br">
+            <figure class="album album--fav fav--br" data-bg="#000000">
               <img src="albums/bigfour/nevermind.png" alt="Nevermind — Nirvana">
               <video src="albums/bigfourhoverstates/nevermind.mp4" poster="albums/bigfour/nevermind.png" muted loop playsinline preload="none"></video>
             </figure>
@@ -952,17 +953,24 @@
       setInterval(swap, 2000);
     })();
 
-    /* -------- Big-four hover states: play the video on hover, pause on leave -------- */
+    /* -------- Big-four hover states: play the video + tint the whole page -------- */
     (function () {
+      var defaultBg = getComputedStyle(document.body).backgroundColor;
       [].slice.call(document.querySelectorAll(".album--fav")).forEach(function (fig) {
         var video = fig.querySelector("video");
-        if (!video) return;
+        var bg = fig.getAttribute("data-bg");
         fig.addEventListener("mouseenter", function () {
-          video.currentTime = 0;
-          var p = video.play();
-          if (p && p.catch) p.catch(function () {});   // ignore autoplay/interrupt rejections
+          if (bg) document.body.style.backgroundColor = bg;   // tint the page
+          if (video) {
+            video.currentTime = 0;
+            var p = video.play();
+            if (p && p.catch) p.catch(function () {});         // ignore autoplay/interrupt rejections
+          }
         });
-        fig.addEventListener("mouseleave", function () { video.pause(); });
+        fig.addEventListener("mouseleave", function () {
+          document.body.style.backgroundColor = defaultBg;    // restore
+          if (video) video.pause();
+        });
       });
     })();
 
