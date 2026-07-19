@@ -270,14 +270,15 @@
   .marquee-block .marquee { padding-block: 0; }
 
   /* ============================================================
-     Album wall — static grid; favorites are 2x2, the rest 1x1.
-     16 albums (4 favs = 16 cells + 12 = 28) fills 7 cols x 4 rows.
+     Album wall — the big four sit together as a 2x2 cluster in the
+     middle; 6 smaller slots are scattered around it and cycle
+     through ALBUM_ROTATION (see script at the bottom of the page).
+     Grid is 8 cols x 4 rows; cluster occupies cols 3-6.
      ============================================================ */
   .album-wall-block { padding-block: clamp(2rem, 6vh, 4rem) 0; }
   .album-wall {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-auto-flow: dense;   /* backfill gaps so the wall stays solid */
+    grid-template-columns: repeat(8, 1fr);
     gap: clamp(0.5rem, 1vw, 0.9rem);
   }
   .album {
@@ -285,17 +286,32 @@
     height: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 16px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   }
-  /* The 4 favorites — larger; hover states to come */
-  .album--fav {
-    grid-column: span 2;
-    grid-row: span 2;
-    border-radius: 10px;
-  }
+  /* The big four — adjacent 2x2 tiles; hover states to come */
+  .album--fav { border-radius: 0px; }
+  .fav--tl { grid-area: 1 / 3 / 3 / 5; }   /* zeppelin4   */
+  .fav--tr { grid-area: 1 / 5 / 3 / 7; }   /* darkside    */
+  .fav--bl { grid-area: 3 / 3 / 5 / 5; }   /* inrainbows  */
+  .fav--br { grid-area: 3 / 5 / 5 / 7; }   /* nevermind   */
+  /* Rotating slots, scattered on both flanks of the cluster */
+  .album-slot { transition: opacity 0.30s ease; }
+  .slot-1 { grid-area: 2 / 2; }
+  .slot-2 { grid-area: 2 / 1; }
+  .slot-3 { grid-area: 3 / 2; }
+  .slot-4 { grid-area: 3 / 1; }
+  .slot-5 { grid-area: 2 / 7; }
+  .slot-6 { grid-area: 2 / 8; }
+  .slot-7 { grid-area: 3 / 7; }
+  .slot-8 { grid-area: 3 / 8; }
   @media (max-width: 700px) {
     .album-wall { grid-template-columns: repeat(4, 1fr); }
+    .fav--tl { grid-area: 1 / 1 / 3 / 3; }
+    .fav--tr { grid-area: 1 / 3 / 3 / 5; }
+    .fav--bl { grid-area: 3 / 1 / 5 / 3; }
+    .fav--br { grid-area: 3 / 3 / 5 / 5; }
+    .album-slot { grid-area: auto; }   /* slots flow into rows below the cluster */
   }
 
   /* words marquee */
@@ -793,25 +809,22 @@
       <!-- =================== Album wall =================== -->
       <div class="album-wall-block reveal">
         <div class="wrap">
-          <span class="marquee-label">My playlist</span>
+          <span class="marquee-label">My album wall</span>
           <div class="album-wall">
-            <!-- favorites are .album--fav (2x2); order scatters them across the wall -->
-            <img class="album album--fav" src="albums/zeppelin4.png"       alt="Led Zeppelin IV — Led Zeppelin">
-            <img class="album" src="albums/AM.png"                         alt="AM — Arctic Monkeys">
-            <img class="album" src="albums/blackparade.png"                alt="The Black Parade — My Chemical Romance">
-            <img class="album" src="albums/rumours.png"                    alt="Rumours — Fleetwood Mac">
-            <img class="album album--fav" src="albums/darkside.png"        alt="The Dark Side of the Moon — Pink Floyd">
-            <img class="album" src="albums/dirt.png"                       alt="Dirt — Alice in Chains">
-            <img class="album" src="albums/movingpictures.png"             alt="Moving Pictures — Rush">
-            <img class="album" src="albums/americanidiot.png"              alt="American Idiot — Green Day">
-            <img class="album album--fav" src="albums/inrainbows.png"      alt="OK Computer — Radiohead">
-            <img class="album" src="albums/doowops.png"                    alt="Doo-Wops &amp; Hooligans — Bruno Mars">
-            <img class="album" src="albums/hamilton.png"                   alt="Hamilton — Original Broadway Cast">
-            <img class="album" src="albums/dtmf.png"                       alt="Debí Tirar Más Fotos — Bad Bunny">
-            <img class="album album--fav" src="albums/nevermind.png"       alt="Nevermind — Nirvana">
-            <img class="album" src="albums/minecraft.png"                  alt="Minecraft — Volume Alpha — C418">
-            <img class="album" src="albums/okcomputer.png"            alt="Californication — Red Hot Chili Peppers">
-            <img class="album" src="albums/thegreatdivide.png"             alt="The Great Divide — Semisonic">
+            <!-- The big four — adjacent 2x2 cluster -->
+            <img class="album album--fav fav--tl" src="albums/bigfour/zeppelin4.png"  alt="Led Zeppelin IV — Led Zeppelin">
+            <img class="album album--fav fav--tr" src="albums/bigfour/darkside.png"   alt="The Dark Side of the Moon — Pink Floyd">
+            <img class="album album--fav fav--bl" src="albums/bigfour/inrainbows.png" alt="In Rainbows — Radiohead">
+            <img class="album album--fav fav--br" src="albums/bigfour/nevermind.png"  alt="Nevermind — Nirvana">
+            <!-- Rotating slots — cycled through ALBUM_ROTATION by the script below -->
+            <img class="album album-slot slot-1" src="albums/AM.png"          alt="AM — Arctic Monkeys">
+            <img class="album album-slot slot-2" src="albums/americanidiot.png" alt="American Idiot — Green Day">
+            <img class="album album-slot slot-3" src="albums/blackparade.png" alt="The Black Parade — My Chemical Romance">
+            <img class="album album-slot slot-4" src="albums/californication.png" alt="Californication — Red Hot Chili Peppers">
+            <img class="album album-slot slot-5" src="albums/currents.png"    alt="Currents — Tame Impala">
+            <img class="album album-slot slot-6" src="albums/dirt.png"        alt="Dirt — Alice in Chains">
+            <img class="album album-slot slot-7" src="albums/thegreatdivide.png"    alt="The Great Divide - Noah Kahan">
+            <img class="album album-slot slot-8" src="albums/okcomputer.png"        alt="OK Computer - Radiohead">
           </div>
         </div>
       </div>
@@ -859,6 +872,52 @@
       track.appendChild(makeSet()); // set A
       track.appendChild(makeSet()); // set B (duplicate → loop has no seam)
     }
+
+    /* -------- Album wall: cycle the scattered slots through the rotation --------
+       To add an album: drop the file in /albums and add a line here.
+       The first N entries also appear in the HTML as the slots' initial covers. */
+    var ALBUM_ROTATION = [
+      ["AM.png",              "AM — Arctic Monkeys"],
+      ["americanidiot.png",   "American Idiot — Green Day"],
+      ["blackparade.png",     "The Black Parade — My Chemical Romance"],
+      ["californication.png", "Californication — Red Hot Chili Peppers"],
+      ["currents.png",        "Currents — Tame Impala"],
+      ["dirt.png",            "Dirt — Alice in Chains"],
+      ["okcomputer.png",      "OK Computer — Radiohead"],
+      ["thegreatdivide.png",  "The Great Divide — Semisonic"]
+      ["doowops.png",         "Doo-Wops & Hooligans — Bruno Mars"],
+      ["dtmf.png",            "Debí Tirar Más Fotos — Bad Bunny"],
+      ["hamilton.png",        "Hamilton — Original Broadway Cast"],
+      ["minecraft.png",       "Minecraft — Volume Alpha — C418"],
+      ["movingpictures.png",  "Moving Pictures — Rush"],
+      ["rumours.png",         "Rumours — Fleetwood Mac"],
+      
+    ];
+    (function () {
+      var slots = [].slice.call(document.querySelectorAll(".album-slot"));
+      // Nothing to cycle unless the pool is bigger than the wall
+      if (!slots.length || ALBUM_ROTATION.length <= slots.length) return;
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var pointer = slots.length % ALBUM_ROTATION.length;  // next album to bring in
+      var turn = 0;                                        // which slot swaps next
+      var swap = function () {
+        var slot = slots[turn % slots.length]; turn++;
+        var entry = ALBUM_ROTATION[pointer];
+        pointer = (pointer + 1) % ALBUM_ROTATION.length;
+        var img = new Image();                             // preload, then fade
+        img.onload = function () {
+          if (reduced) { slot.src = img.src; slot.alt = entry[1]; return; }
+          slot.style.opacity = "0";
+          setTimeout(function () {
+            slot.src = img.src;
+            slot.alt = entry[1];
+            slot.style.opacity = "1";
+          }, 460);                                         // matches the CSS transition
+        };
+        img.src = "albums/" + entry[0];
+      };
+      setInterval(swap, 2000);
+    })();
 
     /* -------- Scroll navigator: glide the dot to the section in view -------- */
     (function () {
