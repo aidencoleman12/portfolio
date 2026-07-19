@@ -3,3 +3,13 @@
 Great motion demos:
 https://madewithgsap.com/effects/
 
+For where vercel lands, use the json file. rewrite is the url rewrite, and redirect takes you from one url to a specific file.
+
+For the opening viewport:
+- show casette tape named (Aiden's space)
+
+For cards:
+- tease vinyl inside on hover, 
+
+
+
