@@ -234,7 +234,7 @@
      Marquees (rebuilt with pure CSS — no JS engine)
      ============================================================ */
   .marquee {
-    --gap: clamp(2rem, 5vw, 4rem);
+    --gap: clamp(4rem, 10vw, 8rem);
     --speed: 32s;
     overflow: hidden;
     width: 100%;
@@ -254,7 +254,7 @@
   }
 
   /* Shared wrapper for both marquees — controls spacing from surrounding sections */
-  .marquees { padding-block: clamp(4rem, 11vh, 8rem); }
+  .marquees { padding-block: clamp(8rem, 16vh, 12rem); }
 
   /* Labelled marquee block */
   .marquee-block { padding-block: clamp(1.75rem, 30vh, 3rem); }
@@ -262,7 +262,7 @@
   .marquee-label {
     display: block;
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: 1rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--muted);
@@ -289,7 +289,25 @@
     object-fit: cover;
     border-radius: 0px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: filter 0.35s ease;
   }
+  /* Focus effect: while a big-four is hovered, dim every other album */
+  .album-wall.is-focusing .album { filter: opacity(0.28); }
+  .album-wall.is-focusing .album--fav.is-focused { filter: none; }
+  /* "Now playing" readout — the hovered album's name */
+  .album-nowplaying {
+    margin-top: clamp(1rem, 2.5vh, 1.75rem);
+    min-height: 1.5em;                 /* reserve space so nothing shifts */
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.1rem, 2.6vw, 1.9rem);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.35s ease, color 0.5s ease;
+  }
+  .album-nowplaying.is-visible { opacity: 1; transform: none; }
   /* The big four — adjacent 2x2 tiles; a hover-state video crossfades in */
   .album--fav {
     border-radius: 0px;
@@ -318,14 +336,14 @@
   .fav--bl { grid-area: 3 / 3 / 5 / 5; }   /* inrainbows  */
   .fav--br { grid-area: 3 / 5 / 5 / 7; }   /* nevermind   */
   /* Rotating slots, scattered on both flanks of the cluster */
-  .album-slot { transition: opacity 0.30s ease; }
+  .album-slot { transition: opacity 0.30s ease, filter 0.35s ease; }
   .slot-1 { grid-area: 2 / 2; }
-  .slot-2 { grid-area: 2 / 1; }
-  .slot-3 { grid-area: 3 / 2; }
+  .slot-2 { grid-area: 2 / 8; }
+  .slot-3 { grid-area: 3 / 7; }
   .slot-4 { grid-area: 3 / 1; }
   .slot-5 { grid-area: 2 / 7; }
-  .slot-6 { grid-area: 2 / 8; }
-  .slot-7 { grid-area: 3 / 7; }
+  .slot-6 { grid-area: 2 / 1; }
+  .slot-7 { grid-area: 3 / 2; }
   .slot-8 { grid-area: 3 / 8; }
   @media (max-width: 700px) {
     .album-wall { grid-template-columns: repeat(4, 1fr); }
@@ -849,6 +867,7 @@
             <img class="album album-slot slot-7" src="albums/thegreatdivide.png"    alt="The Great Divide - Noah Kahan">
             <img class="album album-slot slot-8" src="albums/okcomputer.png"        alt="OK Computer - Radiohead">
           </div>
+          <p class="album-nowplaying" aria-live="polite"></p>
         </div>
       </div>
     </section>
@@ -902,6 +921,10 @@
     var ALBUM_ROTATION = [
       ["AM.png",              "AM — Arctic Monkeys"],
       ["americanidiot.png",   "American Idiot — Green Day"],
+      ["thestranger.png",     "The Stranger - Billy Joel"],
+      ["thebends.png",        "The Bends — Radiohead"],
+      ["songsinthekey.png",   "Songs in the Key of Life — Stevie Wonder"],
+      ["kida.png",            "Kid A — Radiohead"],
       ["blackparade.png",     "The Black Parade — My Chemical Romance"],
       ["californication.png", "Californication — Red Hot Chili Peppers"],
       ["currents.png",        "Currents — Tame Impala"],
@@ -939,25 +962,48 @@
         };
         img.src = "albums/" + entry[0];
       };
-      setInterval(swap, 2000);
+      setInterval(swap, 1500);
     })();
 
-    /* -------- Big-four hover states: play the video + tint the whole page -------- */
+    /* -------- Big-four hover states: video + page tint + focus + now-playing -------- */
     (function () {
       var defaultBg = getComputedStyle(document.body).backgroundColor;
+      var wall = document.querySelector(".album-wall");
+      var nowPlaying = document.querySelector(".album-nowplaying");
+      // pick black/white text for legibility against the hovered album's color
+      var contrastText = function (hex) {
+        var h = (hex || "").replace("#", "");
+        if (h.length === 3) h = h.replace(/./g, "$&$&");
+        var r = parseInt(h.slice(0, 2), 16) / 255,
+            g = parseInt(h.slice(2, 4), 16) / 255,
+            b = parseInt(h.slice(4, 6), 16) / 255;
+        var lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        return lum > 0.55 ? "#0b0b0b" : "#fafafa";
+      };
       [].slice.call(document.querySelectorAll(".album--fav")).forEach(function (fig) {
         var video = fig.querySelector("video");
+        var img = fig.querySelector("img");
         var bg = fig.getAttribute("data-bg");
         fig.addEventListener("mouseenter", function () {
-          if (bg) document.body.style.backgroundColor = bg;   // tint the page
+          if (bg) document.body.style.backgroundColor = bg;    // tint the page
+          if (wall) wall.classList.add("is-focusing");         // dim the others
+          fig.classList.add("is-focused");
+          if (nowPlaying && img) {                             // show the album name
+            nowPlaying.textContent = img.getAttribute("alt");
+            nowPlaying.style.color = contrastText(bg);
+            nowPlaying.classList.add("is-visible");
+          }
           if (video) {
             video.currentTime = 0;
             var p = video.play();
-            if (p && p.catch) p.catch(function () {});         // ignore autoplay/interrupt rejections
+            if (p && p.catch) p.catch(function () {});          // ignore autoplay/interrupt rejections
           }
         });
         fig.addEventListener("mouseleave", function () {
-          document.body.style.backgroundColor = defaultBg;    // restore
+          document.body.style.backgroundColor = defaultBg;     // restore
+          if (wall) wall.classList.remove("is-focusing");
+          fig.classList.remove("is-focused");
+          if (nowPlaying) nowPlaying.classList.remove("is-visible");
           if (video) video.pause();
         });
       });
