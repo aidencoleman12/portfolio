@@ -543,6 +543,32 @@
   .site-footer .brand__name { font-size: 1.25rem; }
   .site-footer .nav a { font-size: 0.8rem; }
 
+  .made-with {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+  }
+  .made-with__label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--gray);
+    margin-right: 0.15rem;
+  }
+  .made-with img {
+    height: 22px;
+    width: auto;
+    opacity: 0.55;
+    filter: grayscale(1);
+    transition: opacity 0.25s ease, filter 0.25s ease;
+  }
+  .made-with img:hover {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+
   /* ============================================================
      Scroll navigator (right-side notched ruler with a gliding dot)
      ============================================================ */
@@ -884,6 +910,16 @@
         <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://www.linkedin.com/in/aidencoleman2026/" target="_blank" rel="noopener">Resume</a>
       </nav>
+    </div>
+    <div class="wrap">
+      <div class="made-with">
+        <span class="made-with__label">made with:</span>
+        <img src="images/claudecode.png" alt="Claude Code" title="Claude Code">
+        <img src="images/vscode.png" alt="VS Code" title="VS Code">
+        <img src="images/figma.svg" alt="Figma" title="Figma">
+        <img src="images/framer.png" alt="Framer" title="Framer">
+        <img src="images/github.svg" alt="GitHub" title="GitHub">
+      </div>
     </div>
   </footer>
 
